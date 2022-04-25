@@ -18,13 +18,13 @@
           <button class="btn-hover color-3" @click="checkNPCoord()">Show Distance to North Pole from Coordinates</button>
           <h4 v-if="showNPCoord">Distance to the north pole from the given coordinates:</h4>
           <p v-if="showNPCoord">{{ northPoleDistanceCoord.toFixed(2) }} km</p>
-          <button class="btn-hover color-3" @click="showNPGPS = !showNPGPS">Show Distance to North Pole from GPS</button>
+          <button class="btn-hover color-3" @click="checkNorthPoolGPS()">Show Distance to North Pole from GPS</button>
           <h4 v-if="showNPGPS">Distance to the north pole from your GPS coordinates:</h4>
           <p v-if="showNPGPS">{{ northPoleDistanceGPS.toFixed(2) }} km</p>
           <button class="btn-hover color-3" @click="checkMoonCoord()">Show Distance to Moon's Core from Coordinates</button>
           <h4 v-if="showMoonCoord">Distance to the moon's core from the given coordinates:</h4>
           <p v-if="showMoonCoord">{{ moonDistanceCoord.toFixed(2) }} km</p>
-          <button class="btn-hover color-3" @click="showMoonGPS = !showMoonGPS">Show Distance to Moon's Core from GPS</button>
+          <button class="btn-hover color-3" @click="checkMoonGPS()">Show Distance to Moon's Core from GPS</button>
           <h4 v-if="showMoonGPS">Distance to the moon's core from your GPS coordinates:</h4>
           <p v-if="showMoonGPS">{{ moonDistanceGPS.toFixed(2) }} km</p>
         </div>
@@ -107,6 +107,18 @@ export default {
       });
       this.marker.setMap(this.map)
       this.checkMarker = true
+    },
+    checkMoonGPS() {
+      if (this.moonDistanceGPS !== 0) {
+        this.showMoonGPS = !this.showMoonGPS
+      }
+      else alert('No GPS Found')
+    },
+    checkNorthPoolGPS() {
+      if (this.northPoleDistanceGPS !== 0) {
+        this.showNPGPS = !this.showNPGPS
+      }
+      else alert('No GPS Found')
     },
     checkMoonCoord() {
       if (this.inputLat !== null || this.inputLng !== null) {
