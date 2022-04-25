@@ -5,7 +5,7 @@
       <h3>Enter Your Coordinates
         <input style="margin: 15px;" v-model="inputLat" placeholder="Enter Latitude">
         <input style="margin: 15px;" v-model="inputLng" placeholder="Enter Longitude">
-        <button @click="getLocation()">Send</button>
+        <button class="btn-hover color-1" @click="getLocation()">Show Country</button>
       </h3>
       <div style="margin-right: 190px">
         <h4>Your GPS coordinates:</h4>
@@ -15,10 +15,16 @@
     <b-row style="margin-top: 20px">
       <b-col>
         <div>
+          <h2>Distance to North Pole</h2>
           <h4>Distance to the north pole from the given coordinates:</h4>
-          <p>{{ northPoleDistance.toFixed(2) }} km</p>
+          <p>{{ northPoleDistanceCoord.toFixed(2) }} km</p>
           <h4>Distance to the north pole from your GPS coordinates:</h4>
           <p>{{ northPoleDistanceGPS.toFixed(2) }} km</p>
+          <h2>Distance to Moon's Core</h2>
+          <h4>Distance to the moon's core from the given coordinates:</h4>
+          <p>{{ moonDistanceCoord.toFixed(2) }} km</p>
+          <h4>Distance to the moon's core from your GPS coordinates:</h4>
+          <p>{{ moonDistanceGPS.toFixed(2) }} km</p>
         </div>
       </b-col>
       <b-col>
@@ -45,8 +51,10 @@ export default {
       inputLng: null,
       checkMarker: false,
       isBusy: false,
-      northPoleDistance: 0,
+      northPoleDistanceCoord: 0,
       northPoleDistanceGPS: 0,
+      moonDistanceCoord: 0,
+      moonDistanceGPS: 0,
       userCoordinates: {
         lat: 0,
         lng: 0
@@ -93,7 +101,7 @@ export default {
       });
       this.marker.setMap(this.map)
       this.checkMarker = true
-      this.northPoleDistance = this.calculateDistanceBetweenCoordinates(this.inputLat,  this.inputLng, 90, 0)
+      this.northPoleDistanceCoord = this.calculateDistanceBetweenCoordinates(this.inputLat,  this.inputLng, 90, 0)
     },
     calculateDistanceBetweenCoordinates(lat1, lon1, lat2, lon2) {
       var earthRadiusKm = 6371;
@@ -135,18 +143,27 @@ export default {
 </script>
 
 <style>
+h2 {
+  color: blue;
+}
 input {
   height: 40px;
   margin-right: 10px;
   font-size: 20px !important;
 }
+.buttons {
+  margin: 10%;
+  text-align: center;
+}
 button {
+  text-align: center;
   border: none;
+  box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
   border-radius: 12px !important;
-  margin: 0;
+  margin: 20pt;
   padding: 0;
-  width: 80px;
-  height: 40px;
+  width: 140px;
+  height: 70px;
   overflow: visible;
   background: dodgerblue;
   color: white;
@@ -156,6 +173,40 @@ button {
   -webkit-font-smoothing: inherit;
   -moz-osx-font-smoothing: inherit;
   -webkit-appearance: none;
+}
+.btn-hover {
+  width: 200px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #fff;
+  cursor: pointer;
+  margin: 20px;
+  height: 55px;
+  text-align:center;
+  border: none;
+  background-size: 300% 100%;
+
+  border-radius: 50px;
+  moz-transition: all .4s ease-in-out;
+  -o-transition: all .4s ease-in-out;
+  -webkit-transition: all .4s ease-in-out;
+  transition: all .4s ease-in-out;
+}
+.btn-hover:hover {
+  background-position: 100% 0;
+  moz-transition: all .4s ease-in-out;
+  -o-transition: all .4s ease-in-out;
+  -webkit-transition: all .4s ease-in-out;
+  transition: all .4s ease-in-out;
+}
+
+.btn-hover:focus {
+  outline: none;
+}
+
+.btn-hover.color-1 {
+  background-image: linear-gradient(to right, #25aae1, #40e495, #30dd8a, #2bb673);
+  box-shadow: 0 4px 15px 0 rgba(49, 196, 190, 0.75);
 }
 p {
   font-size: 20px;
