@@ -1,3 +1,5 @@
 module.exports = {
-    publicPath: '/cs458-project3/'
+    publicPath: process.env.NODE_ENV === 'production'
+        ? '/production-sub-path/'
+        : '/'
 }
