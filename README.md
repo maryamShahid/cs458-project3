@@ -3,10 +3,25 @@
 
 ## How To Install & Run The Web App
 
-- Go to WebStorm
-- Perform: File -> New -> Project From Version Control...
-- Paste https://github.com/maryamShahid/cs458-project3.git to URL and click 'Clone'
-- Go to "package.json" file and click on the run button next to "serve": "vue-cli-service serve" in scripts section 
+## Project setup
+```
+npm install
+```
+
+### Compiles and hot-reloads for development
+```
+npm run serve
+```
+
+### Compiles and minifies for production
+```
+npm run build
+```
+
+### Lints and fixes files
+```
+npm run lint
+```
 
 ## How To Run The Tests
 - Go to IntelliJ
