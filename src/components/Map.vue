@@ -15,16 +15,18 @@
     <b-row style="margin-top: 20px">
       <b-col>
         <div>
-          <h2>Distance to North Pole</h2>
-          <h4>Distance to the north pole from the given coordinates:</h4>
-          <p>{{ northPoleDistanceCoord.toFixed(2) }} km</p>
-          <h4>Distance to the north pole from your GPS coordinates:</h4>
-          <p>{{ northPoleDistanceGPS.toFixed(2) }} km</p>
-          <h2>Distance to Moon's Core</h2>
-          <h4>Distance to the moon's core from the given coordinates:</h4>
-          <p>{{ moonDistanceCoord.toFixed(2) }} km</p>
-          <h4>Distance to the moon's core from your GPS coordinates:</h4>
-          <p>{{ moonDistanceGPS.toFixed(2) }} km</p>
+          <button class="btn-hover color-3" @click="checkNPCoord()">Show Distance to North Pole from Coordinates</button>
+          <h4 v-if="showNPCoord">Distance to the north pole from the given coordinates:</h4>
+          <p v-if="showNPCoord">{{ northPoleDistanceCoord.toFixed(2) }} km</p>
+          <button class="btn-hover color-3" @click="showNPGPS = !showNPGPS">Show Distance to North Pole from GPS</button>
+          <h4 v-if="showNPGPS">Distance to the north pole from your GPS coordinates:</h4>
+          <p v-if="showNPGPS">{{ northPoleDistanceGPS.toFixed(2) }} km</p>
+          <button class="btn-hover color-3" @click="checkMoonCoord()">Show Distance to Moon's Core from Coordinates</button>
+          <h4 v-if="showMoonCoord">Distance to the moon's core from the given coordinates:</h4>
+          <p v-if="showMoonCoord">{{ moonDistanceCoord.toFixed(2) }} km</p>
+          <button class="btn-hover color-3" @click="showMoonGPS = !showMoonGPS">Show Distance to Moon's Core from GPS</button>
+          <h4 v-if="showMoonGPS">Distance to the moon's core from your GPS coordinates:</h4>
+          <p v-if="showMoonGPS">{{ moonDistanceGPS.toFixed(2) }} km</p>
         </div>
       </b-col>
       <b-col>
@@ -51,6 +53,10 @@ export default {
       inputLng: null,
       checkMarker: false,
       isBusy: false,
+      showNPGPS: false,
+      showNPCoord:false,
+      showMoonGPS: false,
+      showMoonCoord: false,
       northPoleDistanceCoord: 0,
       northPoleDistanceGPS: 0,
       moonDistanceCoord: 0,
@@ -66,6 +72,9 @@ export default {
         .then(coordinates => {
           this.userCoordinates = coordinates;
           this.northPoleDistanceGPS = this.calculateDistanceBetweenCoordinates(this.userCoordinates.lat,  this.userCoordinates.lng, 90, 0)
+          var SunCalc = require('suncalc2');
+          const date = new Date();
+          this.moonDistanceGPS = SunCalc.getMoonPosition(date, this.userCoordinates.lat, this.userCoordinates.lng).distance
         });
   },
   mounted() {
@@ -101,7 +110,22 @@ export default {
       });
       this.marker.setMap(this.map)
       this.checkMarker = true
-      this.northPoleDistanceCoord = this.calculateDistanceBetweenCoordinates(this.inputLat,  this.inputLng, 90, 0)
+    },
+    checkMoonCoord() {
+      if (this.inputLat !== null || this.inputLng !== null) {
+        this.showMoonCoord = !this.showMoonCoord
+        var SunCalc = require('suncalc2');
+        const date = new Date();
+        this.moonDistanceCoord = SunCalc.getMoonPosition(date, this.inputLat,  this.inputLng).distance
+      }
+      else alert('Enter Coordinates First')
+    },
+    checkNPCoord() {
+      if (this.inputLat !== null || this.inputLng !== null) {
+        this.showNPCoord = !this.showNPCoord
+        this.northPoleDistanceCoord = this.calculateDistanceBetweenCoordinates(this.inputLat,  this.inputLng, 90, 0)
+      }
+      else alert('Enter Coordinates First')
     },
     calculateDistanceBetweenCoordinates(lat1, lon1, lat2, lon2) {
       var earthRadiusKm = 6371;
@@ -144,7 +168,7 @@ export default {
 
 <style>
 h2 {
-  color: blue;
+  color: darkblue;
 }
 input {
   height: 40px;
@@ -154,25 +178,6 @@ input {
 .buttons {
   margin: 10%;
   text-align: center;
-}
-button {
-  text-align: center;
-  border: none;
-  box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
-  border-radius: 12px !important;
-  margin: 20pt;
-  padding: 0;
-  width: 140px;
-  height: 70px;
-  overflow: visible;
-  background: dodgerblue;
-  color: white;
-  font: inherit;
-  font-size: smaller !important;
-  line-height: normal;
-  -webkit-font-smoothing: inherit;
-  -moz-osx-font-smoothing: inherit;
-  -webkit-appearance: none;
 }
 .btn-hover {
   width: 200px;
@@ -207,6 +212,13 @@ button {
 .btn-hover.color-1 {
   background-image: linear-gradient(to right, #25aae1, #40e495, #30dd8a, #2bb673);
   box-shadow: 0 4px 15px 0 rgba(49, 196, 190, 0.75);
+}
+.btn-hover.color-3 {
+  height: 60pt;
+  font-size: 20px;
+  width: 400pt;
+  background-image: linear-gradient(to right, #667eea, #764ba2, #6B8DD6, #8E37D7);
+  box-shadow: 0 4px 15px 0 rgba(116, 79, 168, 0.75);
 }
 p {
   font-size: 20px;
