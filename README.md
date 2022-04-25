@@ -11,7 +11,7 @@
 ## How To Run The Tests
 - Go to IntelliJ
 - Open the Test Project (in the root directory, folder called "test")
-- Perform Maven Clean&Install on test project
+- Perform Maven Clean&Install on test project but ensure 'skip tests' option is selected.
 - Open test\src\test\TestClass.java file
 - Change line 15 with the location of chromedriver.exe in your local (we used version 99 of chrome driver, yet, this version should be compatible with your Google Chrome)
 - Run TestClass.java and tests should be running.
