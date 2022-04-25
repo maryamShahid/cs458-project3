@@ -1,3 +1,3 @@
 module.exports = {
-    publicPath: '/geolocation-services/'
+    publicPath: '/cs458-project3/'
 }
