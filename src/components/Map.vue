@@ -1,27 +1,35 @@
 <template>
   <div>
-    <div style="display: flex; align-items: center; justify-content: space-between">
-      <div>
-        <h1>Enter coordinates of your location </h1>
-        <input v-model="inputLat" placeholder="latitude">
-        <input v-model="inputLng" placeholder="longitude">
+    <h1 style="margin: 30px">Geolocation Services</h1>
+    <div style="display: flex; align-items: center; justify-content: space-between; margin-left: 20px">
+      <h3>Enter Your Coordinates
+        <input style="margin: 15px;" v-model="inputLat" placeholder="Enter Latitude">
+        <input style="margin: 15px;" v-model="inputLng" placeholder="Enter Longitude">
         <button @click="getLocation()">Send</button>
-      </div>
-      <div>
-        <h1>Your coordinates:</h1>
-        <p>{{ userCoordinates.lat.toFixed(4) }} Latitude, {{ userCoordinates.lng.toFixed(4) }} Longitude</p>
-      </div>
-      <div>
-        <h1>Distance to North Pole from your coordinates:</h1>
-        <p>{{ northPoleDistance.toFixed(2) }} km</p>
+      </h3>
+      <div style="margin-right: 190px">
+        <h4>Your GPS coordinates:</h4>
+          <p>{{ userCoordinates.lat.toFixed(4) }} Latitude, {{ userCoordinates.lng.toFixed(4) }} Longitude</p>
       </div>
     </div>
-    <GmapMap
-      :center="userCoordinates"
-      :zoom="7"
-      style="width: 840px; height: 560px; margin: 32px auto"
-      ref="mapRef"
-      ></GmapMap>
+    <b-row style="margin-top: 20px">
+      <b-col>
+        <div>
+          <h4>Distance to the north pole from the given coordinates:</h4>
+          <p>{{ northPoleDistance.toFixed(2) }} km</p>
+          <h4>Distance to the north pole from your GPS coordinates:</h4>
+          <p>{{ northPoleDistanceGPS.toFixed(2) }} km</p>
+        </div>
+      </b-col>
+      <b-col>
+        <GmapMap
+            :center="userCoordinates"
+            :zoom="4"
+            style="width: 960px; height: 760px; margin-left: auto; margin-right: 10px"
+            ref="mapRef"
+        ></GmapMap>
+      </b-col>
+    </b-row>
   </div>
 </template>
 
@@ -31,9 +39,12 @@ export default {
   data() {
     return {
       map: null,
+      marker: null,
       inputLat: null,
       inputLng: null,
+      checkMarker: false,
       northPoleDistance: 0,
+      northPoleDistanceGPS: 0,
       userCoordinates: {
         lat: 0,
         lng: 0
@@ -44,30 +55,41 @@ export default {
     this.$getLocation({})
         .then(coordinates => {
           this.userCoordinates = coordinates;
+          this.northPoleDistanceGPS = this.calculateDistanceBetweenCoordinates(this.userCoordinates.lat,  this.userCoordinates.lng, 90, 0)
         });
   },
   mounted() {
+    this.$getLocation({})
+        .then(coordinates => {
+          this.userCoordinates = coordinates;
+        });
     this.$refs.mapRef.$mapPromise.then(map => this.map = map)
 
     // const distFrom = require('distance-from')
     // var northPoleCoordinates = [90, 0]
     // var currCoordinates = [this.userCoordinates.lat, this.userCoordinates.lng]
     // this.northPoleDistance = distFrom(currCoordinates).to(northPoleCoordinates).in('mi')
-    this.northPoleDistance = this.calculateDistanceBetweenCoordinates(39.8649,  32.7461, 90, 0)
   },
   methods: {
     getLocation() {
+      if (this.checkMarker) {
+        this.marker.setMap(null);
+      }
+      // eslint-disable-next-line no-undef
+      var myLatlng = new google.maps.LatLng(this.inputLat, this.inputLng);
       if (this.inputLat !== null && this.inputLng !== null) {
         // eslint-disable-next-line no-undef
-        var center = new google.maps.LatLng(this.inputLat,this.inputLng);
+        var center = new google.maps.LatLng(myLatlng);
         this.map.panTo(center);
       }
       // eslint-disable-next-line no-undef
-      var marker = new google.maps.Marker({
-        position: this.userCoordinates,
+      this.marker = new google.maps.Marker({
+        position: myLatlng,
         title:"Hello World!"
       });
-      marker.setMap(this.map)
+      this.marker.setMap(this.map)
+      this.checkMarker = true
+      this.northPoleDistance = this.calculateDistanceBetweenCoordinates(this.inputLat,  this.inputLng, 90, 0)
     },
     calculateDistanceBetweenCoordinates(lat1, lon1, lat2, lon2) {
       var earthRadiusKm = 6371;
@@ -112,21 +134,26 @@ export default {
 input {
   height: 40px;
   margin-right: 10px;
+  font-size: 20px !important;
 }
 button {
   border: none;
-  border-radius: 12px;;
+  border-radius: 12px !important;
   margin: 0;
   padding: 0;
   width: 80px;
-  height: 45px;
+  height: 40px;
   overflow: visible;
-  background: cornflowerblue;
+  background: dodgerblue;
   color: white;
   font: inherit;
+  font-size: smaller !important;
   line-height: normal;
   -webkit-font-smoothing: inherit;
   -moz-osx-font-smoothing: inherit;
   -webkit-appearance: none;
+}
+p {
+  font-size: 20px;
 }
 </style>
