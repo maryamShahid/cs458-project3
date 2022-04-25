@@ -75,21 +75,18 @@ export default {
           var SunCalc = require('suncalc2');
           const date = new Date();
           this.moonDistanceGPS = SunCalc.getMoonPosition(date, this.userCoordinates.lat, this.userCoordinates.lng).distance
-        });
+          this.isBusy = false
+        })
+        .catch(
+            error => {
+              alert(error)
+              this.isBusy = false
+            }
+        );
   },
   mounted() {
     this.isBusy = true
-    this.$getLocation({})
-        .then(coordinates => {
-          this.userCoordinates = coordinates;
-          this.isBusy = false
-        });
     this.$refs.mapRef.$mapPromise.then(map => this.map = map)
-
-    // const distFrom = require('distance-from')
-    // var northPoleCoordinates = [90, 0]
-    // var currCoordinates = [this.userCoordinates.lat, this.userCoordinates.lng]
-    // this.northPoleDistance = distFrom(currCoordinates).to(northPoleCoordinates).in('mi')
   },
   methods: {
     getLocation() {
