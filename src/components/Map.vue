@@ -30,6 +30,7 @@
         ></GmapMap>
       </b-col>
     </b-row>
+    <b-overlay :show="isBusy" no-wrap fixed opacity="0.5" />
   </div>
 </template>
 
@@ -43,6 +44,7 @@ export default {
       inputLat: null,
       inputLng: null,
       checkMarker: false,
+      isBusy: false,
       northPoleDistance: 0,
       northPoleDistanceGPS: 0,
       userCoordinates: {
@@ -59,9 +61,11 @@ export default {
         });
   },
   mounted() {
+    this.isBusy = true
     this.$getLocation({})
         .then(coordinates => {
           this.userCoordinates = coordinates;
+          this.isBusy = false
         });
     this.$refs.mapRef.$mapPromise.then(map => this.map = map)
 
