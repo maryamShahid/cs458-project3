@@ -11,7 +11,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class TestClass {
 
-    private final static String projectURL = "http://localhost:8080/";
+    private final static String projectURL = "http://localhost:8080/cs458-project3/";
     private static final String chromeDriverPath = "C:\\Users\\murat\\Desktop\\chromedriver_win32\\chromedriver.exe";   // NOTE: Change this path according to your local
 
     private static final By latitude = By.xpath("//input[@placeholder='Enter Latitude']");
@@ -160,9 +160,6 @@ public class TestClass {
         ChromeDriver driver = createChromeDriver();
         driver.get(projectURL);
 
-//        driver.findElement(latitude).sendKeys("64.9631");
-//        driver.findElement(longitude).sendKeys("-19.0208"); // Coordinates for Iceland.
-
         WebElement showDistanceButton = driver.findElement(showMoonFromCoordinates);
 
         ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", showDistanceButton);
@@ -172,7 +169,7 @@ public class TestClass {
         String alertMessage = driver.switchTo().alert().getText();
 
         assertThat(alertMessage)
-                .isEqualTo("Enter Coordinates First");     // Distance may vary due to the movement of the moon.
+                .isEqualTo("Enter Coordinates First");
 
         driver.switchTo().alert().accept();
         driver.close();
