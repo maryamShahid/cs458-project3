@@ -1,8 +1,6 @@
 # CS 458 Software Verification and Validation
 ## Project 3: Introduction to Test Driven Development (TDD)
 
-## How To Install & Run The Web App
-
 ## Project setup
 ```
 npm install
