@@ -20,6 +20,7 @@ npm run build
 ```
 npm run lint
 ```
+The main functionality of the website is contained in Map.vue accessed via /src/components/Map.vue
 
 ## How To Run The Tests
 - Go to IntelliJ
